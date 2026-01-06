@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
 
 class CustomFlutterMaps extends StatefulWidget {
   const CustomFlutterMaps({super.key});
@@ -11,6 +12,15 @@ class CustomFlutterMaps extends StatefulWidget {
 
 class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
   MapController mapController = MapController();
+  late Location location;
+  @override
+  void initState() {
+    location = Location();
+    checkAndRequestLocationService();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -59,6 +69,37 @@ class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
         // ),
       ],
     );
+  }
+
+  void checkAndRequestLocationService() async {
+    var isServiceEnabled = await location.serviceEnabled();
+    if (!isServiceEnabled) {
+      isServiceEnabled = await location.requestService();
+      if (!isServiceEnabled) {
+        // errrorrr
+      }
+    }
+    checkAndRequestLocationPermission();
+  }
+
+  void checkAndRequestLocationPermission() async {
+    var permissionStatus = await location.hasPermission();
+    if (permissionStatus == PermissionStatus.denied) {
+      permissionStatus = await location.requestPermission();
+      if (permissionStatus != PermissionStatus.granted) {
+        // errorrr
+      }
+    }
+  }
+
+  void getLocationData() {
+    location.onLocationChanged.listen((locationData) {});
+  }
+
+  @override
+  void dispose() {
+    // locationSubscription?.cancel(); // قفل التتبع فوراً عند الخروج
+    super.dispose();
   }
 }
 
