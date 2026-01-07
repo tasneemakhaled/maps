@@ -12,13 +12,17 @@ class CustomFlutterMaps extends StatefulWidget {
 }
 
 class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
-  LocationService locationService = LocationService();
-  MapController mapController = MapController();
+  late LocationService locationService;
+  late MapController mapController;
   Marker? myLocationMarker;
-  late Location location;
+  //  late Location location;
+
   @override
   void initState() {
-    location = Location();
+    // location = Location();
+    locationService = LocationService();
+    mapController = MapController();
+    updateCurrentLocation();
     // updateMyLocation();
     super.initState();
   }
@@ -37,7 +41,7 @@ class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
             //   ]),
             // ),
             initialCenter: LatLng(30.551196212478537, 31.010724633040052),
-            initialZoom: 10,
+            initialZoom: 12,
           ),
           children: [
             TileLayer(
@@ -71,6 +75,17 @@ class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
     );
   }
 
+  void updateCurrentLocation() async {
+    try {
+      var locationData = await locationService.getLocation();
+      setMyCameraPosition(locationData);
+      setMarker(locationData);
+    } on LocationServiceException catch (e) {
+      // TODO
+    } on LocationPermissionException catch (e) {
+      // TODO
+    } catch (e) {}
+  }
   // void updateMyLocation() async {
   //   await locationService.checkAndRequestLocationService();
   //   var hasPermission = await locationService
@@ -90,15 +105,12 @@ class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
   void setMyCameraPosition(LocationData locationData) {
     mapController.move(
       LatLng(locationData.latitude!, locationData.longitude!),
-      mapController
-          .camera
-          .zoom, // استخدمي الزووم الحالي بدل ما يرجع لـ 12 كل شوية
+      mapController.camera.zoom,
     );
   }
 
   void setMarker(LocationData locationData) {
     setState(() {
-      // تحديث الماركر الوحيد بدل عمل add
       myLocationMarker = Marker(
         point: LatLng(locationData.latitude!, locationData.longitude!),
         width: 60,
