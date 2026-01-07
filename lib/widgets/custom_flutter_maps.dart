@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+import 'package:maps/utils/location_service.dart';
 
 class CustomFlutterMaps extends StatefulWidget {
   const CustomFlutterMaps({super.key});
@@ -11,13 +12,14 @@ class CustomFlutterMaps extends StatefulWidget {
 }
 
 class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
+  LocationService locationService = LocationService();
   MapController mapController = MapController();
+  Marker? myLocationMarker;
   late Location location;
   @override
   void initState() {
     location = Location();
-    checkAndRequestLocationService();
-
+    // updateMyLocation();
     super.initState();
   }
 
@@ -44,11 +46,9 @@ class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
             ),
             MarkerLayer(
               markers: [
-                Marker(
-                  point: LatLng(30.551196212478537, 31.010724633040052),
-                  alignment: Alignment.bottomCenter,
-                  child: Icon(Icons.location_on, color: Colors.red, size: 40),
-                ),
+                if (myLocationMarker != null)
+                  myLocationMarker!, // ضيفيه لو موجود بس
+                // ...staticPlaces, // لو عندك أماكن تانية ضيفيها هنا
               ],
             ),
           ],
@@ -71,38 +71,72 @@ class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
     );
   }
 
-  void checkAndRequestLocationService() async {
-    var isServiceEnabled = await location.serviceEnabled();
-    if (!isServiceEnabled) {
-      isServiceEnabled = await location.requestService();
-      if (!isServiceEnabled) {
-        // errrorrr
-      }
-    }
-    checkAndRequestLocationPermission();
+  // void updateMyLocation() async {
+  //   await locationService.checkAndRequestLocationService();
+  //   var hasPermission = await locationService
+  //       .checkAndRequestLocationPermission();
+  //   if (hasPermission) {
+  //     locationService.getRealTimeLocationData((locationData) {
+  //       if (locationData.latitude != null && locationData.longitude != null) {
+  //         setMarker(locationData);
+
+  //         // تحريك الكاميرا
+  //         setMyCameraPosition(locationData);
+  //       }
+  //     });
+  //   }
+  // }
+
+  void setMyCameraPosition(LocationData locationData) {
+    mapController.move(
+      LatLng(locationData.latitude!, locationData.longitude!),
+      mapController
+          .camera
+          .zoom, // استخدمي الزووم الحالي بدل ما يرجع لـ 12 كل شوية
+    );
   }
 
-  void checkAndRequestLocationPermission() async {
-    var permissionStatus = await location.hasPermission();
-    if (permissionStatus == PermissionStatus.denied) {
-      permissionStatus = await location.requestPermission();
-      if (permissionStatus != PermissionStatus.granted) {
-        // errorrr
-      }
-    }
-  }
-
-  void getLocationData() {
-    location.onLocationChanged.listen((locationData) {});
-  }
-
-  @override
-  void dispose() {
-    // locationSubscription?.cancel(); // قفل التتبع فوراً عند الخروج
-    super.dispose();
+  void setMarker(LocationData locationData) {
+    setState(() {
+      // تحديث الماركر الوحيد بدل عمل add
+      myLocationMarker = Marker(
+        point: LatLng(locationData.latitude!, locationData.longitude!),
+        width: 60,
+        height: 60,
+        alignment: Alignment.bottomCenter,
+        child: Icon(Icons.location_on, color: Colors.red, size: 40),
+      );
+    });
   }
 }
 
+ 
+
+ // void getLocationData() {
+  //   location.changeSettings(distanceFilter: 2);
+  //   location.onLocationChanged.listen((locationData) {
+  //     if (locationData.latitude != null && locationData.longitude != null) {
+  //       setState(() {
+  //         // تحديث الماركر الوحيد بدل عمل add
+  //         myLocationMarker = Marker(
+  //           point: LatLng(locationData.latitude!, locationData.longitude!),
+  //           width: 60,
+  //           height: 60,
+  //           alignment: Alignment.bottomCenter,
+  //           child: Icon(Icons.location_on, color: Colors.red, size: 40),
+  //         );
+  //       });
+
+  //       // تحريك الكاميرا
+  //       mapController.move(
+  //         LatLng(locationData.latitude!, locationData.longitude!),
+  //         mapController
+  //             .camera
+  //             .zoom, // استخدمي الزووم الحالي بدل ما يرجع لـ 12 كل شوية
+  //       );
+  //     }
+  //   });
+  // }
 
 
 // world view zomm level from 0 to 3
