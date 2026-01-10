@@ -1,9 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+import 'package:maps/models/places_autocomplete_model/places_autocomplete_model.dart';
 import 'package:maps/utils/location_service.dart';
+import 'package:maps/utils/places_autocomplete_service.dart';
+
 import 'package:maps/widgets/custom_text_field.dart';
+import 'package:maps/widgets/list_of_predictions.dart';
 
 class FlutterMapsView extends StatefulWidget {
   const FlutterMapsView({super.key});
@@ -13,19 +19,53 @@ class FlutterMapsView extends StatefulWidget {
 }
 
 class _FlutterMapsViewState extends State<FlutterMapsView> {
+  late PlacesAutocompleteService placesService;
+  late TextEditingController textEditingController;
   late LocationService locationService;
   late MapController mapController;
   Marker? myLocationMarker;
+  List<PlacesAutocompleteModel>places=[];
   //  late Location location;
 
   @override
   void initState() {
+    textEditingController = TextEditingController();
+    placesService = PlacesAutocompleteService();
+    fetchPredictions();
     // location = Location();
     locationService = LocationService();
     mapController = MapController();
     updateCurrentLocation();
     // updateMyLocation();
     super.initState();
+  }
+
+  void fetchPredictions() {
+    textEditingController.addListener(() async {
+      if (textEditingController.text.isNotEmpty) {
+        var result = await placesService.getPredictions(
+          input: textEditingController.text,
+        );
+        places.clear();
+        places.addAll(result);
+        setState(() {
+          
+        });
+      }else{
+        places.clear();
+        setState(() {
+          
+        });
+      }
+      // log(textEditingController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -62,8 +102,15 @@ class _FlutterMapsViewState extends State<FlutterMapsView> {
           top: 16,
           left: 16,
           right: 16,
-          child: CustomTextField()),
-        
+          child: Column(
+            children: [
+              CustomTextField(textEditingController: textEditingController),
+              SizedBox(height: 16,),
+              ListOfPredictions(itemCount: places.length,places: places,),
+            ],
+          ),
+        ),
+
         // Positioned(
         //   bottom: 16,
         //   right: 16,

@@ -8,7 +8,8 @@ class TestFlutterMaps extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SafeArea(child: FlutterMapsView()));
+      body: SafeArea(child: FlutterMapsView()),
+    );
   }
 }
 

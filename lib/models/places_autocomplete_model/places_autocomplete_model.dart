@@ -1,22 +1,27 @@
-import 'feature.dart';
+// lib/models/places_autocomplete_model/places_autocomplete_model.dart
 
 class PlacesAutocompleteModel {
-  String? type;
-  List<Feature>? features;
+  final int? placeId;
+  final String? name;
+  final String? displayName;
+  final String? lat;
+  final String? lon;
 
-  PlacesAutocompleteModel({this.type, this.features});
+  PlacesAutocompleteModel({
+    this.placeId,
+    this.name,
+    this.displayName,
+    this.lat,
+    this.lon,
+  });
 
   factory PlacesAutocompleteModel.fromJson(Map<String, dynamic> json) {
     return PlacesAutocompleteModel(
-      type: json['type'] as String?,
-      features: (json['features'] as List<dynamic>?)
-          ?.map((e) => Feature.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      placeId: json['place_id'],
+      name: json['name'],
+      displayName: json['display_name'],
+      lat: json['lat'],
+      lon: json['lon'],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-    'type': type,
-    'features': features?.map((e) => e.toJson()).toList(),
-  };
 }
