@@ -3,15 +3,16 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:maps/utils/location_service.dart';
+import 'package:maps/widgets/custom_text_field.dart';
 
-class CustomFlutterMaps extends StatefulWidget {
-  const CustomFlutterMaps({super.key});
+class FlutterMapsView extends StatefulWidget {
+  const FlutterMapsView({super.key});
 
   @override
-  State<CustomFlutterMaps> createState() => _CustomFlutterMapsState();
+  State<FlutterMapsView> createState() => _FlutterMapsViewState();
 }
 
-class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
+class _FlutterMapsViewState extends State<FlutterMapsView> {
   late LocationService locationService;
   late MapController mapController;
   Marker? myLocationMarker;
@@ -57,6 +58,12 @@ class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
             ),
           ],
         ),
+        Positioned(
+          top: 16,
+          left: 16,
+          right: 16,
+          child: CustomTextField()),
+        
         // Positioned(
         //   bottom: 16,
         //   right: 16,

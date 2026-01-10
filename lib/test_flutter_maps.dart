@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:maps/widgets/custom_flutter_maps.dart';
+import 'package:maps/views/flutter_maps_view.dart';
 
 class TestFlutterMaps extends StatelessWidget {
   const TestFlutterMaps({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: CustomFlutterMaps());
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(child: FlutterMapsView()));
   }
 }
 
