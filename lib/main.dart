@@ -16,3 +16,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// create text field
+// listen to text field
+// search places
+// display all suggessions

@@ -9,6 +9,7 @@ class TestFlutterMaps extends StatelessWidget {
     return Scaffold(body: CustomFlutterMaps());
   }
 }
+
 //inquire about location service (is it enabled in device to access location or not)
 //request permission
 //get location

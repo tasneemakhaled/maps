@@ -122,34 +122,31 @@ class _CustomFlutterMapsState extends State<CustomFlutterMaps> {
   }
 }
 
- 
+// void getLocationData() {
+//   location.changeSettings(distanceFilter: 2);
+//   location.onLocationChanged.listen((locationData) {
+//     if (locationData.latitude != null && locationData.longitude != null) {
+//       setState(() {
+//         // تحديث الماركر الوحيد بدل عمل add
+//         myLocationMarker = Marker(
+//           point: LatLng(locationData.latitude!, locationData.longitude!),
+//           width: 60,
+//           height: 60,
+//           alignment: Alignment.bottomCenter,
+//           child: Icon(Icons.location_on, color: Colors.red, size: 40),
+//         );
+//       });
 
- // void getLocationData() {
-  //   location.changeSettings(distanceFilter: 2);
-  //   location.onLocationChanged.listen((locationData) {
-  //     if (locationData.latitude != null && locationData.longitude != null) {
-  //       setState(() {
-  //         // تحديث الماركر الوحيد بدل عمل add
-  //         myLocationMarker = Marker(
-  //           point: LatLng(locationData.latitude!, locationData.longitude!),
-  //           width: 60,
-  //           height: 60,
-  //           alignment: Alignment.bottomCenter,
-  //           child: Icon(Icons.location_on, color: Colors.red, size: 40),
-  //         );
-  //       });
-
-  //       // تحريك الكاميرا
-  //       mapController.move(
-  //         LatLng(locationData.latitude!, locationData.longitude!),
-  //         mapController
-  //             .camera
-  //             .zoom, // استخدمي الزووم الحالي بدل ما يرجع لـ 12 كل شوية
-  //       );
-  //     }
-  //   });
-  // }
-
+//       // تحريك الكاميرا
+//       mapController.move(
+//         LatLng(locationData.latitude!, locationData.longitude!),
+//         mapController
+//             .camera
+//             .zoom, // استخدمي الزووم الحالي بدل ما يرجع لـ 12 كل شوية
+//       );
+//     }
+//   });
+// }
 
 // world view zomm level from 0 to 3
 // country view zomm level from 4 to 6

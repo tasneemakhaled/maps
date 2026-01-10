@@ -44,23 +44,6 @@ class LocationServiceException implements Exception {}
 
 class LocationPermissionException implements Exception {}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import 'package:location/location.dart';
 
 // class LocationService {
@@ -95,6 +78,5 @@ class LocationPermissionException implements Exception {}
 //     location.changeSettings(distanceFilter: 2);
 //     location.onLocationChanged.listen(onData);
 //   }
-
 
 // }
