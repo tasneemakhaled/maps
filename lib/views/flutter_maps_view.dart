@@ -5,8 +5,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:maps/models/places_autocomplete_model/places_autocomplete_model.dart';
+import 'package:maps/models/places_details_model/places_details_model.dart';
 import 'package:maps/utils/location_service.dart';
 import 'package:maps/utils/places_autocomplete_service.dart';
+import 'package:maps/utils/places_details_service.dart';
 
 import 'package:maps/widgets/custom_text_field.dart';
 import 'package:maps/widgets/list_of_predictions.dart';
@@ -20,6 +22,7 @@ class FlutterMapsView extends StatefulWidget {
 
 class _FlutterMapsViewState extends State<FlutterMapsView> {
   late PlacesAutocompleteService placesService;
+  late PlacesDetailsService placesDetailsService;
   late TextEditingController textEditingController;
   late LocationService locationService;
   late MapController mapController;
@@ -31,6 +34,7 @@ class _FlutterMapsViewState extends State<FlutterMapsView> {
   void initState() {
     textEditingController = TextEditingController();
     placesService = PlacesAutocompleteService();
+    placesDetailsService = PlacesDetailsService();
     fetchPredictions();
     // location = Location();
     locationService = LocationService();
@@ -106,7 +110,17 @@ class _FlutterMapsViewState extends State<FlutterMapsView> {
             children: [
               CustomTextField(textEditingController: textEditingController),
               SizedBox(height: 16,),
-              ListOfPredictions(itemCount: places.length,places: places,),
+              ListOfPredictions(
+                onPlaceSelected: (PlacesDetailsModel placeDetails) {
+                  // هنا هتتعامل مع المكان اللي اتحدد
+                  log('Selected Place: ${placeDetails.lat}');
+            textEditingController.clear();
+            places.clear();
+            setState(() {});
+
+                },
+                placesDetails: placesDetailsService,
+                itemCount: places.length,places: places,),
             ],
           ),
         ),
