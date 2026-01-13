@@ -14,14 +14,28 @@ class PlacesAutocompleteModel {
     this.lat,
     this.lon,
   });
-
-  factory PlacesAutocompleteModel.fromJson(Map<String, dynamic> json) {
-    return PlacesAutocompleteModel(
-      placeId: json['place_id'],
-      name: json['name'],
-      displayName: json['display_name'],
-      lat: json['lat'],
-      lon: json['lon'],
-    );
-  }
+Map<String, dynamic> toJson() {
+  return {
+    'display_name': displayName,
+    'lat': lat,
+    'lon': lon,
+  };
 }
+
+factory PlacesAutocompleteModel.fromJson(Map<String, dynamic> json) {
+  return PlacesAutocompleteModel(
+    displayName: json['display_name'],
+    lat: json['lat'],
+    lon: json['lon'],
+  );}
+}
+//   factory PlacesAutocompleteModel.fromJson(Map<String, dynamic> json) {
+//     return PlacesAutocompleteModel(
+//       placeId: json['place_id'],
+//       name: json['name'],
+//       displayName: json['display_name'],
+//       lat: json['lat'],
+//       lon: json['lon'],
+//     );
+//   }
+// }
